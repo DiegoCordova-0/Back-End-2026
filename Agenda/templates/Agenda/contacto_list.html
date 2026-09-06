@@ -1,0 +1,21 @@
+{% extends 'Agenda/base.html' %}
+{% block title %}Listado{% endblock %}
+{% block content %}
+<h1>Contactos</h1>
+<form method="get" action="{% url 'contacto_list' %}">
+  <input type="text" name="q" value="{{ query }}" placeholder="Buscar contacto">
+  <button type="submit">Buscar</button>
+</form>
+<ul>
+  {% for c in object_list %}
+    <li>
+      <a href="{% url 'contacto_detail' c.pk %}">{{ c.nombre }}</a>
+      — {{ c.correo }} — {{ c.telefono }} — {{ c.direccion }}
+      [<a href="{% url 'contacto_update' c.pk %}">Editar</a>]
+      [<a href="{% url 'contacto_delete' c.pk %}">Eliminar</a>]
+    </li>
+  {% empty %}
+    <li>No hay contactos.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'Agenda/base.html' %}
+{% block content %}
+<h1>{{ object.nombre }}</h1>
+<p>Email: {{ object.email }}</p>
+<p>Teléfono: {{ object.telefono }}</p>
+<p>Dirección: {{ object.direccion }}</p>
+<a href="{% url 'contacto_update' object.pk %}">Editar</a>
+{% endblock %}
