@@ -1,8 +1,149 @@
+<!-- Agenda/templates/Agenda/contacto_detail.html -->
 {% extends 'Agenda/base.html' %}
+{% block title %}{{ object.nombre }}{% endblock %}
 {% block content %}
-<h1>{{ object.nombre }}</h1>
-<p>Email: {{ object.email }}</p>
-<p>Teléfono: {{ object.telefono }}</p>
-<p>Dirección: {{ object.direccion }}</p>
-<a href="{% url 'contacto_update' object.pk %}">Editar</a>
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card shadow-lg border-0">
+      <div class="card-header bg-primary text-white py-4">
+        <h1 class="mb-0">
+          <i class="bi bi-person-circle"></i> {{ object.nombre }}
+        </h1>
+      </div>
+      <div class="card-body p-4">
+        
+        <!-- Información de contacto -->
+        <div class="contact-info">
+          
+          <!-- Email -->
+          <div class="info-box p-3 bg-light rounded-3 mb-3 d-flex align-items-center">
+            <div class="icon-wrapper me-3" style="font-size: 2rem; color: #3498db;">
+              <i class="bi bi-envelope"></i>
+            </div>
+            <div>
+              <p class="text-muted mb-1">Email</p>
+              <a href="mailto:{{ object.correo }}" class="text-decoration-none fw-bold fs-5">
+                {{ object.correo }}
+              </a>
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="info-box p-3 bg-light rounded-3 mb-3 d-flex align-items-center">
+            <div class="icon-wrapper me-3" style="font-size: 2rem; color: #27ae60;">
+              <i class="bi bi-telephone"></i>
+            </div>
+            <div>
+              <p class="text-muted mb-1">Teléfono</p>
+              <a href="tel:{{ object.telefono }}" class="text-decoration-none fw-bold fs-5">
+                {{ object.telefono }}
+              </a>
+            </div>
+          </div>
+
+          <!-- Dirección -->
+          <div class="info-box p-3 bg-light rounded-3 mb-3 d-flex align-items-center">
+            <div class="icon-wrapper me-3" style="font-size: 2rem; color: #e74c3c;">
+              <i class="bi bi-geo-alt"></i>
+            </div>
+            <div>
+              <p class="text-muted mb-1">Dirección</p>
+              <p class="text-decoration-none fw-bold fs-5 mb-0">
+                {{ object.direccion|default:"No especificada" }}
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <div class="contact-meta">
+          <small class="text-muted">
+            <i class="bi bi-info-circle"></i> ID del Contacto: <code>{{ object.pk }}</code>
+          </small>
+        </div>
+      </div>
+      <div class="card-footer bg-light p-3">
+        <div class="d-flex gap-2">
+          <a href="{% url 'contacto_update' object.pk %}" class="btn btn-warning btn-lg">
+            <i class="bi bi-pencil-square"></i> Editar
+          </a>
+          <a href="{% url 'contacto_delete' object.pk %}" class="btn btn-danger btn-lg">
+            <i class="bi bi-trash"></i> Eliminar
+          </a>
+          <a href="{% url 'contacto_list' %}" class="btn btn-secondary btn-lg">
+            <i class="bi bi-arrow-left"></i> Volver
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card shadow-lg border-0 mb-3">
+      <div class="card-header bg-info text-white py-3">
+        <h5 class="mb-0">
+          <i class="bi bi-info-circle"></i> Acciones Rápidas
+        </h5>
+      </div>
+      <div class="card-body p-3">
+        <div class="d-grid gap-2">
+          <a href="mailto:{{ object.correo }}" class="btn btn-outline-primary">
+            <i class="bi bi-envelope"></i> Enviar Email
+          </a>
+          <a href="tel:{{ object.telefono }}" class="btn btn-outline-success">
+            <i class="bi bi-telephone"></i> Llamar
+          </a>
+          <a href="{% url 'contacto_update' object.pk %}" class="btn btn-outline-warning">
+            <i class="bi bi-pencil-square"></i> Modificar
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-light border-1 border-info">
+      <h6 class="fw-bold mb-2">
+        <i class="bi bi-lightbulb"></i> Consejo
+      </h6>
+      <p class="mb-0 text-sm">
+        Haz clic en el email o teléfono para contactar directamente, o edita para actualizar la información.
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .info-box {
+    border-left: 4px solid #3498db;
+    transition: all 0.3s ease;
+  }
+
+  .info-box:hover {
+    transform: translateX(5px);
+  }
+
+  .card-header {
+    border-radius: 10px 10px 0 0;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #3498db;
+    border-color: #3498db;
+  }
+
+  .btn-outline-success:hover {
+    background-color: #27ae60;
+    border-color: #27ae60;
+  }
+
+  .btn-outline-warning:hover {
+    background-color: #f39c12;
+    border-color: #f39c12;
+  }
+</style>
 {% endblock %}
