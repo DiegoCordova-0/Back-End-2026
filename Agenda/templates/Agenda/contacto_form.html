@@ -1,8 +1,115 @@
+<!-- Agenda/templates/Agenda/contacto_form.html -->
 {% extends 'Agenda/base.html' %}
+{% block title %}Crear/Editar Contacto{% endblock %}
 {% block content %}
-<h1>Contacto</h1>
-<form method="post">{% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Guardar</button>
-</form>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-lg">
+      <div class="card-header bg-primary text-white py-3">
+        <h2 class="mb-0">
+          {% if form.instance.pk %}
+            <i class="bi bi-pencil-square"></i> Editar Contacto
+          {% else %}
+            <i class="bi bi-plus-circle"></i> Crear Nuevo Contacto
+          {% endif %}
+        </h2>
+      </div>
+      <div class="card-body p-4">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="bi bi-exclamation-triangle"></i>
+              <strong>Error!</strong>
+              {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endif %}
+
+          {% for field in form %}
+            <div class="mb-3">
+              {% if field.field.widget.input_type == 'hidden' %}
+                {{ field }}
+              {% else %}
+                <label for="{{ field.id_for_label }}" class="form-label fw-bold">
+                  {% if field.name == 'nombre' %}
+                    <i class="bi bi-person"></i>
+                  {% elif field.name == 'correo' %}
+                    <i class="bi bi-envelope"></i>
+                  {% elif field.name == 'telefono' %}
+                    <i class="bi bi-telephone"></i>
+                  {% elif field.name == 'direccion' %}
+                    <i class="bi bi-geo-alt"></i>
+                  {% endif %}
+                  {{ field.label }}
+                  {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                </label>
+
+                {% if field.field.widget.input_type == 'textarea' %}
+                  <textarea 
+                    id="{{ field.id_for_label }}" 
+                    name="{{ field.name }}" 
+                    class="form-control {% if field.errors %}is-invalid{% endif %}"
+                    rows="4"
+                    placeholder="{{ field.help_text }}"
+                  >{{ field.value|default:'' }}</textarea>
+                {% else %}
+                  {{ field }}
+                {% endif %}
+
+                {% if field.errors %}
+                  <div class="invalid-feedback d-block">
+                    {% for error in field.errors %}
+                      <i class="bi bi-exclamation-circle"></i> {{ error }}<br>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                {% if field.help_text %}
+                  <small class="form-text text-muted d-block mt-1">
+                    {{ field.help_text|safe }}
+                  </small>
+                {% endif %}
+              {% endif %}
+            </div>
+          {% endfor %}
+
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-success btn-lg">
+              <i class="bi bi-check-circle"></i> Guardar
+            </button>
+            <a href="{% url 'contacto_list' %}" class="btn btn-secondary btn-lg">
+              <i class="bi bi-arrow-left"></i> Cancelar
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus, .form-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+  }
+
+  .form-label {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-header {
+    border-radius: 10px 10px 0 0;
+  }
+</style>
 {% endblock %}

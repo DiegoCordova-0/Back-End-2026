@@ -28,6 +28,7 @@ def contacto_detail(request, pk):
     contacto = get_object_or_404(Contacto, pk=pk)
     return render(request, 'Agenda/contacto_detail.html', {'object': contacto})
 
+@csrf_protect
 def contacto_create(request):
     if request.method == 'POST':
         form = ContactoForm(request.POST)
@@ -38,6 +39,7 @@ def contacto_create(request):
     else:
         form = ContactoForm()
     return render(request, 'Agenda/contacto_form.html', {'form': form})
+
 
 def contacto_update(request, pk):
     contacto = get_object_or_404(Contacto, pk=pk)

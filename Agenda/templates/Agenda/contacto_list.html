@@ -1,21 +1,94 @@
+<!-- Agenda/templates/Agenda/contacto_list.html -->
 {% extends 'Agenda/base.html' %}
-{% block title %}Listado{% endblock %}
+{% block title %}Listado de Contactos{% endblock %}
 {% block content %}
-<h1>Contactos</h1>
-<form method="get" action="{% url 'contacto_list' %}">
-  <input type="text" name="q" value="{{ query }}" placeholder="Buscar contacto">
-  <button type="submit">Buscar</button>
-</form>
-<ul>
-  {% for c in object_list %}
-    <li>
-      <a href="{% url 'contacto_detail' c.pk %}">{{ c.nombre }}</a>
-      — {{ c.correo }} — {{ c.telefono }} — {{ c.direccion }}
-      [<a href="{% url 'contacto_update' c.pk %}">Editar</a>]
-      [<a href="{% url 'contacto_delete' c.pk %}">Eliminar</a>]
-    </li>
-  {% empty %}
-    <li>No hay contactos.</li>
-  {% endfor %}
-</ul>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>
+      <i class="bi bi-people"></i> Mis Contactos
+    </h1>
+    <p class="text-muted">Gestiona tu agenda de contactos</p>
+  </div>
+  <a href="{% url 'contacto_create' %}" class="btn btn-primary btn-lg">
+    <i class="bi bi-plus-circle"></i> Nuevo Contacto
+  </a>
+</div>
+
+<!-- Barra de búsqueda -->
+<div class="card mb-4 shadow-sm">
+  <div class="card-body">
+    <form method="get" action="{% url 'contacto_list' %}" class="row g-3">
+      <div class="col-md-9">
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-white">
+            <i class="bi bi-search"></i>
+          </span>
+          <input type="text" name="q" class="form-control" value="{{ query }}" placeholder="Buscar por nombre, email o teléfono...">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100 btn-lg">
+          <i class="bi bi-funnel"></i> Buscar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if object_list %}
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th scope="col" style="width: 25%;">Nombre</th>
+          <th scope="col" style="width: 25%;">Email</th>
+          <th scope="col" style="width: 20%;">Teléfono</th>
+          <th scope="col" style="width: 30%;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in object_list %}
+        <tr>
+          <td>
+            <a href="{% url 'contacto_detail' c.pk %}" class="text-decoration-none fw-bold">
+              <i class="bi bi-person-circle"></i> {{ c.nombre }}
+            </a>
+          </td>
+          <td>
+            <i class="bi bi-envelope"></i>
+            <a href="mailto:{{ c.correo }}" class="text-decoration-none">
+              {{ c.correo }}
+            </a>
+          </td>
+          <td>
+            <i class="bi bi-telephone"></i>
+            <a href="tel:{{ c.telefono }}" class="text-decoration-none">
+              {{ c.telefono }}
+            </a>
+          </td>
+          <td>
+            <div class="btn-group" role="group">
+              <a href="{% url 'contacto_detail' c.pk %}" class="btn btn-sm btn-info" title="Ver detalles">
+                <i class="bi bi-eye"></i> Ver
+              </a>
+              <a href="{% url 'contacto_update' c.pk %}" class="btn btn-sm btn-warning" title="Editar">
+                <i class="bi bi-pencil-square"></i> Editar
+              </a>
+              <a href="{% url 'contacto_delete' c.pk %}" class="btn btn-sm btn-danger" title="Eliminar">
+                <i class="bi bi-trash"></i> Eliminar
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-info alert-dismissible fade show" role="alert">
+    <i class="bi bi-info-circle"></i>
+    <strong>No hay contactos</strong> — Comienza creando tu primer contacto.
+    <a href="{% url 'contacto_create' %}" class="alert-link">Crear contacto</a>
+  </div>
+{% endif %}
 {% endblock %}
