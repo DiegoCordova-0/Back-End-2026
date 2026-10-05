@@ -20,10 +20,9 @@ def producto_create(request):
         if form.is_valid():
             form.save()
             return redirect('producto_list')
-
     else:
         form = ProductoForm()
-        return render(request, 'inventario/producto_form.html', {'form': form})
+    return render(request, 'inventario/producto_form.html', {'form': form})
 
 def producto_update(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
@@ -37,7 +36,7 @@ def producto_update(request, pk):
 
     else:
         form = ProductoForm(instance=producto)
-        return render(request, 'inventario/producto_form.html', {'form': form})
+    return render(request, 'inventario/producto_form.html', {'form': form})
 
 def producto_delete(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
