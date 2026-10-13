@@ -1,0 +1,182 @@
+:root {
+    --agenda-bg: #f3f6fb;
+    --agenda-panel: #ffffff;
+    --agenda-border: #d6e1f0;
+    --agenda-text: #1f2a44;
+    --agenda-muted: #5b6783;
+    --agenda-primary: #2f5d9b;
+    --agenda-primary-soft: #e4ecfa;
+    --agenda-shadow: 0 8px 20px rgba(37, 63, 109, 0.08);
+    --agenda-radius: 12px;
+}
+
+body,
+#container {
+    background: linear-gradient(180deg, #f7f9fd 0%, var(--agenda-bg) 100%);
+    color: var(--agenda-text);
+}
+
+#header {
+    background: linear-gradient(90deg, #344d73, #3f5f91);
+    color: #f6f8ff;
+    box-shadow: 0 4px 16px rgba(20, 39, 73, 0.25);
+}
+
+#header a,
+#user-tools,
+#user-tools a {
+    color: #f6f8ff;
+}
+
+#site-name a {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+#content,
+.module,
+.inline-group,
+.submit-row,
+.dashboard .module,
+.object-tools a,
+#changelist-filter,
+#changelist table,
+.login #content {
+    background: var(--agenda-panel);
+    border: 1px solid var(--agenda-border);
+    border-radius: var(--agenda-radius);
+    box-shadow: var(--agenda-shadow);
+}
+
+#content {
+    margin: 22px;
+    padding: 22px;
+}
+
+div.breadcrumbs {
+    background: #e9f0fb;
+    color: var(--agenda-muted);
+    border: 1px solid var(--agenda-border);
+    border-radius: 10px;
+    margin: 16px 22px 0;
+}
+
+div.breadcrumbs a {
+    color: var(--agenda-primary);
+}
+
+a,
+a:visited {
+    color: var(--agenda-primary);
+}
+
+a:hover,
+a:focus {
+    color: #23497f;
+}
+
+.module h2,
+.module caption,
+.inline-group h2,
+#changelist-filter h2 {
+    background: #edf3fc;
+    color: var(--agenda-text);
+    border-bottom: 1px solid var(--agenda-border);
+}
+
+#changelist table thead th {
+    background: #eff4fc;
+}
+
+#changelist table tbody tr:nth-child(even) {
+    background: #f8faff;
+}
+
+#changelist table tbody tr:hover {
+    background: #ecf2fc;
+}
+
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button,
+.object-tools a,
+.selector-available h2,
+.selector-chosen h2 {
+    background: var(--agenda-primary);
+    color: #fff;
+    border: 1px solid #284f83;
+    border-radius: 8px;
+}
+
+.button.default,
+input[type="submit"].default,
+.submit-row input.default {
+    background: #1f4d86;
+}
+
+.button:hover,
+.button:focus,
+input[type="submit"]:hover,
+input[type="submit"]:focus,
+input[type="button"]:hover,
+input[type="button"]:focus,
+a.button:hover,
+a.button:focus,
+.object-tools a:hover,
+.object-tools a:focus {
+    background: #244b7f;
+    outline: none;
+}
+
+input,
+select,
+textarea {
+    border: 1px solid #b9c9e4;
+    border-radius: 8px;
+    padding: 6px 9px;
+    color: var(--agenda-text);
+    background: #ffffff;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.button:focus,
+a:focus {
+    outline: 2px solid #5b86c7;
+    outline-offset: 1px;
+}
+
+.login #header {
+    margin-bottom: 20px;
+}
+
+.login #content {
+    max-width: 440px;
+    margin: 28px auto;
+    padding: 24px;
+}
+
+.login .submit-row {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+@media (max-width: 1024px) {
+    #content {
+        margin: 14px;
+        padding: 16px;
+    }
+
+    div.breadcrumbs {
+        margin: 12px 14px 0;
+    }
+
+    #changelist-filter {
+        margin-top: 14px;
+    }
+}
