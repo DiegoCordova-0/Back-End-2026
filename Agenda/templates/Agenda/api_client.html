@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cliente API de Agenda</title>
+    <style>
+        body { font: 1rem/1.5 system-ui, sans-serif; margin: 2rem auto; max-width: 860px; padding: 0 1rem; background: #f3f6fa; color: #172033; }
+        section { background: white; border-radius: 12px; margin: 1rem 0; padding: 1.25rem; box-shadow: 0 3px 14px #17203312; }
+        form { display: flex; flex-wrap: wrap; gap: .75rem; }
+        input, button { border: 1px solid #cbd5e1; border-radius: 7px; font: inherit; padding: .65rem; }
+        input { flex: 1 1 180px; }
+        button { background: #1d4ed8; border: 0; color: white; cursor: pointer; }
+        table { border-collapse: collapse; margin-top: 1rem; width: 100%; }
+        th, td { border-bottom: 1px solid #e2e8f0; padding: .6rem; text-align: left; }
+        #status { white-space: pre-wrap; overflow-wrap: anywhere; }
+        @media (max-width: 600px) { table { font-size: .85rem; } th, td { padding: .35rem; } }
+    </style>
+</head>
+<body>
+    <h1>Agenda: cliente de API REST</h1>
+    <p>Inicia sesión con un usuario Django para obtener un JWT y consultar o crear contactos.</p>
+    <section>
+        <h2>Autenticación</h2>
+        <form id="login">
+            <input id="username" autocomplete="username" placeholder="Usuario" required>
+            <input id="password" type="password" autocomplete="current-password" placeholder="Contraseña" required>
+            <button>Obtener token</button>
+        </form>
+    </section>
+    <section>
+        <h2>Nuevo contacto</h2>
+        <form id="create-contact">
+            <input id="name" placeholder="Nombre" required>
+            <input id="phone" placeholder="Teléfono" required>
+            <input id="email" type="email" placeholder="Correo">
+            <input id="address" placeholder="Dirección">
+            <button>Crear contacto</button>
+        </form>
+    </section>
+    <section>
+        <h2>Contactos</h2>
+        <button id="load">Cargar contactos</button>
+        <div style="overflow-x:auto">
+            <table>
+                <thead><tr><th>ID</th><th>Nombre</th><th>Teléfono</th><th>Correo</th><th>Dirección</th></tr></thead>
+                <tbody id="contacts"></tbody>
+            </table>
+        </div>
+    </section>
+    <section><h2>Estado</h2><div id="status" role="status">Sin autenticar</div></section>
+    <script>
+        let accessToken = '';
+        const status = document.getElementById('status');
+        const authorizedHeaders = () => ({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        });
+
+        document.getElementById('login').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            try {
+                const response = await fetch('/api/token/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('username').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(JSON.stringify(data));
+                accessToken = data.access;
+                status.textContent = 'Autenticación exitosa. Token JWT listo.';
+            } catch (error) {
+                status.textContent = `Error de autenticación: ${error.message}`;
+            }
+        });
+
+        document.getElementById('load').addEventListener('click', async () => {
+            if (!accessToken) { status.textContent = 'Primero inicia sesión.'; return; }
+            try {
+                const response = await fetch('/api/contactos/', { headers: authorizedHeaders() });
+                const data = await response.json();
+                if (!response.ok) throw new Error(JSON.stringify(data));
+                const tbody = document.getElementById('contacts');
+                tbody.replaceChildren();
+                for (const contact of data) {
+                    const row = document.createElement('tr');
+                    for (const value of [contact.id, contact.nombre, contact.telefono, contact.correo || '-', contact.direccion || '-']) {
+                        const cell = document.createElement('td');
+                        cell.textContent = value;
+                        row.appendChild(cell);
+                    }
+                    tbody.appendChild(row);
+                }
+                status.textContent = `Se cargaron ${data.length} contactos.`;
+            } catch (error) {
+                status.textContent = `Error al cargar contactos: ${error.message}`;
+            }
+        });
+
+        document.getElementById('create-contact').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            if (!accessToken) { status.textContent = 'Primero inicia sesión.'; return; }
+            try {
+                const response = await fetch('/api/contactos/', {
+                    method: 'POST',
+                    headers: authorizedHeaders(),
+                    body: JSON.stringify({
+                        nombre: document.getElementById('name').value,
+                        telefono: document.getElementById('phone').value,
+                        correo: document.getElementById('email').value || null,
+                        direccion: document.getElementById('address').value || null
+                    })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(JSON.stringify(data));
+                status.textContent = `Contacto ${data.id} creado.`;
+                event.target.reset();
+                document.getElementById('load').click();
+            } catch (error) {
+                status.textContent = `Error al crear contacto: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

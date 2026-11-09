@@ -65,3 +65,7 @@ def contacto_delete(request, pk):
 
 def filtro_contactos(request):
     return contacto_list(request)
+
+
+def api_client(request):
+    return render(request, 'Agenda/api_client.html')
